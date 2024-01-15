@@ -154,13 +154,16 @@ array normal(
     const std::vector<int>& shape,
     Dtype dtype,
     const std::optional<array>& key /*= nullopt */,
+    const float mu /*= 0.0 */,
+    const float sigma /*= 1.0 */,
     StreamOrDevice s /* = {} */) {
   auto stream = to_stream(s);
   auto low = array(std::nextafter(-1.0f, 0.0f), dtype);
   auto high = array(1.0f, dtype);
   auto samples = uniform(low, high, shape, dtype, key, stream);
-  return multiply(
-      array(std::sqrt(2.0), dtype), erfinv(samples, stream), stream);
+  auto z =
+      multiply(array(std::sqrt(2.0), dtype), erfinv(samples, stream), stream);
+  return mu + sigma * z;
 }
 
 array randint(

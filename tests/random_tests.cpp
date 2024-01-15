@@ -1,7 +1,6 @@
 // Copyright © 2023 Apple Inc.
 
 #include <numeric>
-
 #include "doctest/doctest.h"
 
 #include "mlx/mlx.h"
@@ -419,6 +418,15 @@ TEST_CASE("test random normal") {
     CHECK_EQ(out.dtype(), bfloat16);
     CHECK(all(less(abs(out), array(inf))).item<bool>());
     CHECK(abs(float(mean(out).item<bfloat16_t>())) < 0.1);
+  }
+
+  // Test normal with the given mu and sigma
+  {
+    const float mu = 5.0;
+    const float sigma = 0.01;
+    auto key = random::key(128291);
+    auto out = random::normal({100}, key, mu, sigma);
+    CHECK(all(less(abs(out - mu), array(sigma * 10))).item<bool>());
   }
 }
 

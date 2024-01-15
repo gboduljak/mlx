@@ -89,12 +89,16 @@ array normal(
     const std::vector<int>& shape,
     Dtype dtype,
     const std::optional<array>& key = std::nullopt,
+    const float mu = 0.0,
+    const float sigma = 1.0,
     StreamOrDevice s = {});
 inline array normal(
     const std::vector<int>& shape,
     const std::optional<array>& key = std::nullopt,
+    const float mu = 0.0,
+    const float sigma = 1.0,
     StreamOrDevice s = {}) {
-  return normal(shape, float32, key, s);
+  return normal(shape, float32, key, mu, sigma, s);
 }
 
 /** Generate integer samples uniformly at random */

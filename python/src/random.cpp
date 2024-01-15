@@ -100,13 +100,16 @@ void init_random(py::module_& parent_module) {
       [](const std::vector<int>& shape,
          std::optional<Dtype> type,
          const std::optional<array>& key,
+         const float mu,
+         const float sigma,
          StreamOrDevice s) {
-        return normal(shape, type.value_or(float32), key, s);
+        return normal(shape, type.value_or(float32), key, mu, sigma, s);
       },
-
       "shape"_a = std::vector<int>{},
       "dtype"_a = std::optional{float32},
       "key"_a = none,
+      "mu"_a = 0.0,
+      "sigma"_a = 1.0,
       "stream"_a = none,
       R"pbdoc(
         Generate normally distributed random numbers.
@@ -115,7 +118,8 @@ void init_random(py::module_& parent_module) {
             shape (list(int), optional): Shape of the output. Default is ``()``.
             dtype (Dtype, optional): Type of the output. Default is ``float32``.
             key (array, optional): A PRNG key. Default: None.
-
+            mu (float): The mean of the normal distribution. Default: 0.
+            sigma (float): The standard deviation of the normal distribution. Default: 1;
         Returns:
             array: The output array of random values.
       )pbdoc");
